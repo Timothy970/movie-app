@@ -1,36 +1,158 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# A Movie Recommendation App
+
+MovieRecs is a sleek and modern web application built to help users discover popular and trending movies. Users can search for specific titles, view detailed information including cast and ratings, and manage their session with a simple authentication system.
+
+## ✨ Features
+
+  Browse Popular Movies: View a paginated list of the most popular movies from The Movie Database (TMDB).
+  Detailed Movie View: Click on any movie to see detailed information, including its poster, overview, rating, cast, and crew.
+  Real-time Search: Instantly search for movies by title or keyword.
+  User Authentication: Simple and secure login
+  Responsive Design: A fully responsive and mobile-first user interface.
+  Loading & Error States: Smooth user experience with skeleton loaders while fetching data.
+  Efficient Caching: API requests are cached to reduce loading times and minimize network requests.
+
+## 🛠️ Tech Stack
+Next.js
+TypeScript
+Tailwind CSS
+TanStack Query (React Query) 
+NextAuth.js 
+
+
+# DESIGNS 
+### Screen 1: Home Page (Movie Listing)
+
+This is the main screen users will see after logging in. It displays a list of popular or recommended movies and provides the main navigation and search tools.
+
+#### Visual Layout
+
++--------------------------------------------------------------------------+
+| [Logo: MovieRecs]      [ Search for a movie...          ]  [User Avatar] |  <- Header
++--------------------------------------------------------------------------+
+|                                                                          |
+|  <H1>Popular Movies</H1>                                                   |
+|                                                                          |
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |  <- Movie
+|  |                 |  |                 |  |                 |  |                 |     Grid
+|  | Movie Title 1   |  | Movie Title 2   |  | Movie Title 3   |  | Movie Title 4   |
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|                                                                          |
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |
+|  |                 |  |                 |  |                 |  |                 |
+|  | Movie Title 5   |  | Movie Title 6   |  | Movie Title 7   |  | Movie Title 8   |
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|                                                                          |
+|                     < Previous      [1] 2 3 ... 10     Next >             <- Pagination
+|                                                                          |
++--------------------------------------------------------------------------+
+
+### ⏳ Screen 2: Home Page - Loading State
+
+This screen shows what the user sees while the initial list of movies is being fetched from the API. Using a skeleton screen provides a better user experience than a simple spinner.
+
+#### Visual Layout
+
++--------------------------------------------------------------------------+
+| [Logo: MovieRecs]      [ Search for a movie...          ]  [User Avatar] |
++--------------------------------------------------------------------------+
+|                                                                          |
+|  <H1>Popular Movies</H1>                                                   |
+|                                                                          |
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|  |                 |  |                 |  |                 |  |                 |  <- Skeleton
+|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|     Cards
+|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|                                                                          |
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|  |                 |  |                 |  |                 |  |                 |
+|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|
+|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|
+|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
+|                                                                          |
++--------------------------------------------------------------------------+
+
+
+### Screen 3: Movie Details Page
+
+This page displays comprehensive information about a single movie selected from the home page.
+
+#### Visual Layout
+
++--------------------------------------------------------------------------+
+| [Logo: MovieRecs]      [ Search for a movie...          ]  [User Avatar] |
++--------------------------------------------------------------------------+
+|                                                                          |
+|  < Back to list                                                          |
+|                                                                          |
+|  +----------------------------------------------------------------------+
+|  |                                                                      |
+|  |                      [Backdrop Image]                                |
+|  |                                                                      |
+|  +----------------------------------------------------------------------+
+|                                                                          |
+|  +-----------------+  <H1>Movie Title (2025)</H1>                         |
+|  | [Movie Poster]  |                                                    |
+|  |                 |  Rating: ★★★★★ (8.5/10)                             |
+|  |                 |                                                    |
+|  +-----------------+  <H3>Overview</H3>                                   |
+|                       [Lorem ipsum dolor sit amet, consectetur           |
+|                       adipiscing elit. Sed do eiusmod tempor incididunt  |
+|                       ut labore et dolore magna aliqua...]               |
+|                                                                          |
+|  <H3>Cast</H3>                                                            |
+|                                                                          |
+|  [ < ] +-----------+ +-----------+ +-----------+ +-----------+ [ > ]      <- Horizontally
+|        | [Actor Pic] | | [Actor Pic] | | [Actor Pic] | | [Actor Pic] |         Scrollable
+|        | Actor Name  | | Actor Name  | | Actor Name  | | Actor Name  |
+|        | Character   | | Character   | | Character   | | Character   |
+|        +-----------+ +-----------+ +-----------+ +-----------+
+|                                                                          |
++--------------------------------------------------------------------------+
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running, follow these simple steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Make sure you have the following installed on your machine:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+   [Node.js] (v20 or later)
+   [npm] (or yarn)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Installation
+1.  Install dependencies:
 
-## Learn More
+    ```bash
+    npm install
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+3.  Set up environment variables:
+    Create a file named `.env.local` in the root of your project and add the following variables. You can use the `.env.example` file as a template.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```env
+    # .env.local
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    # Get your free API key from https://www.themoviedb.org/
+    NEXT_PUBLIC_TMDB_API_KEY=YOUR_TMDB_API_KEY
 
-## Deploy on Vercel
+    # NextAuth.js Configuration
+    # Generate a secret using: `openssl rand -base64 32` in your terminal
+    NEXTAUTH_SECRET=YOUR_GENERATED_SECRET
+    NEXTAUTH_URL=http://localhost:3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    # Google Auth Provider (optional)
+    # Get credentials from Google Cloud Console: https://console.cloud.google.com/
+    GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+    GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4.  Run the development server:
+
+    ```bash
+    npm run dev
+    ```
