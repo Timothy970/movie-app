@@ -9,6 +9,7 @@ import { MovieInfo } from '@/components/movieinfo';
 import { useEffect } from 'react';
 import { OneMovieData } from '@/data/mockdata';
 import { CastData } from '@/data/mockdata';
+import ProtectedRoute from '@/components/protectroute';
 // Mock movie data
 async function getMovieDetails(id: string): Promise<MovieDetail> {
     console.log(id)
@@ -38,25 +39,28 @@ export default function MovieDetailPageMovieDetailPage({ params }: { params: Pro
     if (!mockMovie) return <div className="text-white p-6">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Header
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-            />
-
-            <main className="max-w-7xl mx-auto px-6 py-8">
-                <BackButton onClick={handleBackClick} className="mb-6" />
-
-                <BackdropImage
-                    src={`https://image.tmdb.org/t/p/original${mockMovie.backdrop_path}`}
-                    alt={`${mockMovie.title} backdrop`}
-                    className="mb-8"
+        <ProtectedRoute>
+            <div className="min-h-screen bg-gray-50">
+                <Header
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    showSearchBar={false}
                 />
 
-                <MovieInfo movie={mockMovie} className="mb-12" />
+                <main className="max-w-7xl mx-auto px-6 py-8">
+                    <BackButton onClick={handleBackClick} className="mb-6" />
 
-                <CastCarousel cast={mockCast} />
-            </main>
-        </div>
+                    <BackdropImage
+                        src={`https://image.tmdb.org/t/p/original${mockMovie.backdrop_path}`}
+                        alt={`${mockMovie.title} backdrop`}
+                        className="mb-8"
+                    />
+
+                    <MovieInfo movie={mockMovie} className="mb-12" />
+
+                    <CastCarousel cast={mockCast} />
+                </main>
+            </div>
+        </ProtectedRoute>
     );
 };
