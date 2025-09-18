@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, Mail, Lock, User, Github } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Github } from 'lucide-react'
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -37,7 +37,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         setFormData(prev => ({ ...prev, [name]: value }))
         setError('')
     }
-
+    function getErrorMessage(error: unknown): string {
+        if (error instanceof Error) return error.message;
+        if (typeof error === "object" && error !== null && "message" in error) {
+            return String((error as { message?: unknown }).message);
+        }
+        return "An unknown error occurred";
+    }
     const handleFirebaseSignUp = async (email: string, password: string) => {
         try {
             // Create user in Firebase Auth
@@ -45,9 +51,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             const user = userCredential.user
             console.log("user****", user)
             return user
-        } catch (error: any) {
-            throw new Error(error.message || 'Failed to create user')
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error('Failed to sign up');
+            }
         }
+
     }
 
     const handleFirebaseSignIn = async (email: string, password: string) => {
@@ -56,9 +67,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             const user = userCredential.user
             console.log("user****", user)
             return user
-        } catch (error: any) {
-            throw new Error(error.message || 'Failed to sign in')
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw new Error(error.message);
+            } else {
+                throw new Error('Failed to sign in');
+            }
         }
+
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -76,8 +92,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                 await handleFirebaseSignIn(formData.email, formData.password)
                 router.push('/')
             }
-        } catch (error: any) {
-            setError(error.message || 'Something went wrong')
+        } catch (error: unknown) {
+            setError(getErrorMessage(error) || 'Something went wrong')
         } finally {
             setIsLoading(false)
         }
@@ -100,8 +116,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             console.log("user****", user)
 
             router.push('/');
-        } catch (error: any) {
-            setError(error.message || `Failed to sign in with ${provider}`);
+        } catch (error: unknown) {
+            setError(getErrorMessage(error) || `Failed to sign in with ${provider}`);
         } finally {
             setIsLoading(false);
         }
