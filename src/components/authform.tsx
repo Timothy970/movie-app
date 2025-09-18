@@ -12,7 +12,6 @@ import {
     auth,
     signInWithGoogle,
     signInWithGitHub,
-    // storeUserData
 } from '@/lib/firebase'
 
 interface AuthFormProps {
