@@ -10,14 +10,19 @@ import { useEffect } from 'react';
 import { OneMovieData } from '@/data/mockdata';
 import { CastData } from '@/data/mockdata';
 import ProtectedRoute from '@/components/protectroute';
+import api from '@/lib/axios';
 // Mock movie data
 async function getMovieDetails(id: string): Promise<MovieDetail> {
     console.log(id)
-    return OneMovieData as MovieDetail;
+    const res = await api.get(`/${id}`);
+    console.log("individual movie data****", res.data)
+    return res.data
 }
 async function getMovieCastDetails(id: string): Promise<CastMember[]> {
     console.log(id)
-    return CastData as CastMember[];
+    const res = await api.get(`/${id}/credits`);
+    console.log("individual movie cast****", res.data.cast)
+    return res.data.cast
 }
 // Main MovieDetail Page Component
 export default function MovieDetailPageMovieDetailPage({ params }: { params: Promise<{ id: string }> }) {

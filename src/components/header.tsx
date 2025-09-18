@@ -4,6 +4,7 @@ import Logo from "./logo";
 import SearchBar from "./searchbar";
 import UserAvatar from "./useravatar";
 import { useAuth } from "@/context/AuthContext";
+import LoadingBubbles from "./loadingbubbles";
 interface HeaderProps {
     searchQuery: string;
     onSearchChange: (query: string) => void;
@@ -18,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({
     showSearchBar,
 }) => {
     const { user, loading } = useAuth();
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <LoadingBubbles />;
     console.log("user kwa header::", user)
     return (
         <header className={`bg-white border-b border-gray-200 px-6 py-4 ${className}`}>
