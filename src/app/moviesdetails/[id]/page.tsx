@@ -15,7 +15,7 @@ import ErrorPage from "@/components/errorpage";
 
 // --- API functions ---
 async function getMovieDetails(id: string): Promise<MovieDetail> {
-    const res = await api.get(`/${id}`);
+    const res = await api.get(`movie/${id}`);
     return res.data;
 }
 
