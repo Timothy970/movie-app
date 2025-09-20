@@ -7,12 +7,11 @@ import { CastCarousel } from "@/components/castcarousel";
 import { CastMember, MovieDetail } from "@/types/Movies";
 import { BackdropImage } from "@/components/backdropimage";
 import { MovieInfo } from "@/components/movieinfo";
-import ProtectedRoute from "@/components/protectroute";
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import LoadingBubbles from "@/components/loadingbubbles";
 import ErrorPage from "@/components/errorpage";
-
+import { useRouter } from "next/navigation";
 // --- API functions ---
 async function getMovieDetails(id: string): Promise<MovieDetail> {
     const res = await api.get(`movie/${id}`);
@@ -31,7 +30,7 @@ export default function MovieDetailPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = use(params);
-
+    const router = useRouter()
     // Queries
     const {
         data: movie,
@@ -54,8 +53,7 @@ export default function MovieDetailPage({
     });
 
     const handleBackClick = () => {
-        console.log("Navigate back to movie list");
-        // e.g. router.back() if using next/navigation
+        router.back()
     };
 
     if (movieLoading) return <LoadingBubbles />;
@@ -63,30 +61,28 @@ export default function MovieDetailPage({
     if (!movie) return <ErrorPage />;
 
     return (
-        <ProtectedRoute>
-            <div className="min-h-screen bg-gray-50">
-                <Header searchQuery={""} onSearchChange={() => { }} showSearchBar={false} />
+        <div className="min-h-screen bg-gray-50">
+            <Header searchQuery={""} onSearchChange={() => { }} showSearchBar={false} />
 
-                <main className="max-w-7xl mx-auto px-6 py-8">
-                    <BackButton onClick={handleBackClick} className="mb-6" />
+            <main className="max-w-7xl mx-auto px-6 py-8">
+                <BackButton onClick={handleBackClick} className="mb-6" />
 
-                    <BackdropImage
-                        src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                        alt={`${movie.title} backdrop`}
-                        className="mb-8"
-                    />
+                <BackdropImage
+                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                    alt={`${movie.title} backdrop`}
+                    className="mb-8"
+                />
 
-                    <MovieInfo movie={movie} className="mb-12" />
+                <MovieInfo movie={movie} className="mb-12" />
 
-                    {castLoading ? (
-                        <div className="text-white">...</div>
-                    ) : castError ? (
-                        <div></div>
-                    ) : (
-                        <CastCarousel cast={cast} />
-                    )}
-                </main>
-            </div>
-        </ProtectedRoute>
+                {castLoading ? (
+                    <div className="text-white">...</div>
+                ) : castError ? (
+                    <div></div>
+                ) : (
+                    <CastCarousel cast={cast} />
+                )}
+            </main>
+        </div>
     );
 }

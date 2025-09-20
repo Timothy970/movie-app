@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, Tv } from "lucide-react";
 import { logout } from "@/lib/firebase";
+import { useRouter } from 'next/navigation'
 
 interface UserAvatarProps {
     email?: string | null;
@@ -9,7 +10,7 @@ interface UserAvatarProps {
 const UserAvatar: React.FC<UserAvatarProps> = ({ email }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-
+    const router = useRouter()
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -49,7 +50,9 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ email }) => {
         await logout();
         setIsOpen(false);
     };
-
+    const goToFavouriteMovies = () => {
+        router.push("/favourites")
+    }
     return (
         <div className="relative" ref={dropdownRef}>
             {/* Avatar */}
@@ -85,6 +88,13 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ email }) => {
 
                     {/* Actions */}
                     <div className="p-2">
+                        <button
+                            onClick={goToFavouriteMovies}
+                            className="w-full flex items-center px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                        >
+                            <Tv className="w-4 h-4 mr-2 text-blue-500" />
+                            Favourite Movies
+                        </button>
                         <button
                             onClick={handleLogout}
                             className="w-full flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"

@@ -6,10 +6,10 @@ export const BackButton: React.FC<BackButtonProps> = ({ onClick, className = '' 
     return (
         <button
             onClick={onClick}
-            className={`flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 ${className}`}
+            className={`flex items-center underline text-blue-500 hover:text-blue-900 transition-colors duration-200 ${className}`}
         >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to list
+            Back
         </button>
     );
 };
