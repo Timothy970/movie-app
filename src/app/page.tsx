@@ -43,9 +43,6 @@ const MovieRecsPage: React.FC = () => {
     if (error) {
         return <ErrorPage />
     }
-    if (movies.length == 0) {
-        return <ErrorPage />
-    }
     return (
         <div className="min-h-screen bg-gray-50">
             <Header

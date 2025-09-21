@@ -2,7 +2,7 @@ import React from "react";
 
 // Single shimmer card component
 const ShimmerCard: React.FC = () => (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+    <div data-testid="shimmer" className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
         {/* Poster placeholder with shimmer */}
         <div className="aspect-[3/4] bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] animate-shimmer relative">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer-wave"></div>
