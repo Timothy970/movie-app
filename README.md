@@ -21,7 +21,18 @@ Next.js
 TypeScript
 Tailwind CSS
 TanStack Query (React Query)
-NextAuth.js
+TanStack Query (React Query)
+Handles server-state management and caching for API requests. This ensures efficient data fetching, background updates, and a smooth UI experience.
+
+Firebase Authentication
+Used for Google and GitHub login. Firebase securely manages authentication flows and tokens, so you don’t need to build them from scratch.
+
+Supabase
+Provides storage (e.g., uploading media or files) and database integration. It serves as the backend service alongside Firebase Auth.
+
+Jest
+Framework for unit testing. Ensures components, hooks, and utility functions behave correctly and remain stable as the project grows.
+
 
 
 
@@ -147,6 +158,18 @@ Make sure you have the following installed on your machine:
    [Node.js] (v20 or later)
    [npm] (or yarn)
 
+## ENV VARIABLES
+NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
+
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_firebase_app_id
+
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 ### Installation
 1.  Install dependencies:
