@@ -41,10 +41,13 @@ export const ContinueWatching: React.FC<ContinueWatchingProps> = ({ onWatchNow, 
             id: item.id,
             title: item.title,
             name: item.title,
-            poster_path: item.posterPath,
+            poster_path: item.posterPath ?? null,
+            backdrop_path: item.backdropPath ?? null,
             media_type: item.mediaType,
-            vote_average: item.voteAverage,
-            overview: item.overview,
+            vote_average: item.voteAverage ?? 0,
+            overview: item.overview ?? '',
+            vote_count: 0,
+            popularity: 0,
         };
 
         if (onWatchNow) {
