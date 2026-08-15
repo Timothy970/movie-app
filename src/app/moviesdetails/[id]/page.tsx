@@ -105,6 +105,7 @@ export default function MovieDetailPage({
                             mediaType="movie"
                             imdbId={imdbId}
                             title={movie.title}
+                            posterPath={movie.poster_path}
                             inline={true}
                         />
                     </div>

@@ -9,6 +9,7 @@ import ErrorPage from "@/components/errorpage";
 import { HeroBanner } from "@/components/herobanner";
 import { GenrePills, GenreOption } from "@/components/genrepills";
 import { QuickViewModal } from "@/components/quickviewmodal";
+import { ContinueWatching } from "@/components/continuewatching";
 
 import { MediaItem } from "@/types/Media";
 import {
@@ -159,133 +160,147 @@ export default function HomePage() {
             />
 
             <main className="max-w-7xl mx-auto px-6 py-6 w-full flex-1">
-                {/* Hero Showcase (only on Home or empty search) */}
-                {!searchQuery && activeTab === 'home' && trendingItems.length > 0 && (
-                    <HeroBanner
-                        items={trendingItems}
-                        onWatchNow={handleWatchNow}
-                        onDetails={handleDetails}
-                    />
-                )}
-
-                {/* 1. Trending Now Carousel */}
-                {!searchQuery && activeTab === 'home' && trendingItems.length > 1 && (
-                    <div className="mb-10">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <TrendingUp className="w-5 h-5 text-blue-400" />
-                                <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                                    Trending Now
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-1">
-                            {trendingItems.slice(1, 9).map((item) => (
-                                <div key={item.id} className="w-44 flex-shrink-0">
-                                    <MovieCard movie={item} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* 2. Trending Shows Carousel */}
-                {!searchQuery && activeTab === 'home' && trendingShows.length > 0 && (
-                    <div className="mb-10">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <Tv className="w-5 h-5 text-purple-400" />
-                                <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                                    Trending Shows
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-1">
-                            {trendingShows.slice(0, 10).map((item) => (
-                                <div key={item.id} className="w-44 flex-shrink-0">
-                                    <MovieCard movie={item} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* 3. Trending Movies Carousel */}
-                {!searchQuery && activeTab === 'home' && trendingMovies.length > 0 && (
-                    <div className="mb-10">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <Film className="w-5 h-5 text-indigo-400" />
-                                <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                                    Trending Movies
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-1">
-                            {trendingMovies.slice(0, 10).map((item) => (
-                                <div key={item.id} className="w-44 flex-shrink-0">
-                                    <MovieCard movie={item} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* 4. Explore Catalog Header & Genre Filter Pills */}
-                <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl md:text-2xl font-bold text-white capitalize tracking-tight flex items-center gap-2">
-                            <Sparkles className="w-5 h-5 text-yellow-400" />
-                            {searchQuery
-                                ? `Results for "${searchQuery}"`
-                                : activeTab === 'series'
-                                    ? 'Popular Series Catalog'
-                                    : activeTab === 'kids'
-                                        ? 'Kids Animation & Movies'
-                                        : activeTab === 'movies'
-                                            ? 'Popular Movies Catalog'
-                                            : 'Explore Catalog'}
-                        </h2>
-                    </div>
-
-                    {!searchQuery && (
-                        <GenrePills
-                            genres={DEFAULT_GENRES}
-                            selectedGenreId={selectedGenreId}
-                            onSelectGenre={(genreId) => {
-                                setSelectedGenreId(genreId);
-                                setCurrentPage(1);
-                            }}
-                        />
-                    )}
-                </div>
-
-                {/* Main Media Grid */}
-                {isLoading || isFetching ? (
-                    <MovieCardShimmer />
-                ) : items.length === 0 ? (
-                    <div className="text-center py-20 glass-panel rounded-3xl border border-white/10">
-                        <p className="text-gray-400 text-lg">No media titles found.</p>
-                    </div>
+                {/* ── CONTINUE WATCHING TAB VIEW ── */}
+                {activeTab === 'continue' ? (
+                    <ContinueWatching onWatchNow={handleWatchNow} onDetails={handleDetails} />
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12">
-                        {items.map((item) => (
-                            <MovieCard key={item.id} movie={item} />
-                        ))}
-                    </div>
-                )}
+                    <>
+                        {/* Hero Showcase (only on Home or empty search) */}
+                        {!searchQuery && activeTab === 'home' && trendingItems.length > 0 && (
+                            <HeroBanner
+                                items={trendingItems}
+                                onWatchNow={handleWatchNow}
+                                onDetails={handleDetails}
+                            />
+                        )}
 
-                {/* Pagination */}
-                {items.length > 0 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                        className="mt-10 mb-8"
-                    />
+                        {/* 1. Continue Watching Section on Home Dashboard */}
+                        {!searchQuery && activeTab === 'home' && (
+                            <div className="mb-10">
+                                <ContinueWatching onWatchNow={handleWatchNow} onDetails={handleDetails} />
+                            </div>
+                        )}
+
+                        {/* 2. Trending Now Carousel */}
+                        {!searchQuery && activeTab === 'home' && trendingItems.length > 1 && (
+                            <div className="mb-10">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <TrendingUp className="w-5 h-5 text-blue-400" />
+                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                                            Trending Now
+                                        </h2>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-1">
+                                    {trendingItems.slice(1, 9).map((item) => (
+                                        <div key={item.id} className="w-44 flex-shrink-0">
+                                            <MovieCard movie={item} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 3. Trending Shows Carousel */}
+                        {!searchQuery && activeTab === 'home' && trendingShows.length > 0 && (
+                            <div className="mb-10">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <Tv className="w-5 h-5 text-purple-400" />
+                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                                            Trending Shows
+                                        </h2>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-1">
+                                    {trendingShows.slice(0, 10).map((item) => (
+                                        <div key={item.id} className="w-44 flex-shrink-0">
+                                            <MovieCard movie={item} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 4. Trending Movies Carousel */}
+                        {!searchQuery && activeTab === 'home' && trendingMovies.length > 0 && (
+                            <div className="mb-10">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <Film className="w-5 h-5 text-indigo-400" />
+                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                                            Trending Movies
+                                        </h2>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-1">
+                                    {trendingMovies.slice(0, 10).map((item) => (
+                                        <div key={item.id} className="w-44 flex-shrink-0">
+                                            <MovieCard movie={item} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 5. Explore Catalog Header & Genre Filter Pills */}
+                        <div className="mb-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl md:text-2xl font-bold text-white capitalize tracking-tight flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-yellow-400" />
+                                    {searchQuery
+                                        ? `Results for "${searchQuery}"`
+                                        : activeTab === 'series'
+                                            ? 'Popular Series Catalog'
+                                            : activeTab === 'kids'
+                                                ? 'Kids Animation & Movies'
+                                                : activeTab === 'movies'
+                                                    ? 'Popular Movies Catalog'
+                                                    : 'Explore Catalog'}
+                                </h2>
+                            </div>
+
+                            {!searchQuery && (
+                                <GenrePills
+                                    genres={DEFAULT_GENRES}
+                                    selectedGenreId={selectedGenreId}
+                                    onSelectGenre={(genreId) => {
+                                        setSelectedGenreId(genreId);
+                                        setCurrentPage(1);
+                                    }}
+                                />
+                            )}
+                        </div>
+
+                        {/* Main Media Grid */}
+                        {isLoading || isFetching ? (
+                            <MovieCardShimmer />
+                        ) : items.length === 0 ? (
+                            <div className="text-center py-20 glass-panel rounded-3xl border border-white/10">
+                                <p className="text-gray-400 text-lg">No media titles found.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12">
+                                {items.map((item) => (
+                                    <MovieCard key={item.id} movie={item} />
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Pagination */}
+                        {items.length > 0 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={setCurrentPage}
+                                className="mt-10 mb-8"
+                            />
+                        )}
+                    </>
                 )}
             </main>
 

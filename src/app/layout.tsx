@@ -16,8 +16,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MovieRecs",
-  description: "Movie recommendation app",
+  title: "MovieRecs — Futuristic Cinematic Streaming & Recommendations",
+  description: "Discover, explore, and stream popular movies and TV series in high quality.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
