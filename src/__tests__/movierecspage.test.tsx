@@ -1,13 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import MovieRecsPage from "../app/page";
+import HomePage from "../app/page";
 import api from "@/lib/axios";
 
-// mock axios
 jest.mock("@/lib/axios");
 
-// 👇 inline mock for next/navigation
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
         push: jest.fn(),
@@ -19,48 +17,86 @@ jest.mock("next/navigation", () => ({
     useSearchParams: () => new URLSearchParams(),
 }));
 
+jest.mock("next/image", () => ({
+    __esModule: true,
+    default: (props: React.ComponentProps<'img'>) => {
+        // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+        return <img {...props} src={typeof props.src === 'string' ? props.src : 'mock-img'} />;
+    },
+}));
+
+jest.mock("@/context/AuthContext", () => ({
+    useAuth: () => ({
+        user: null,
+        loading: false,
+    }),
+}));
+
 const renderWithClient = (ui: React.ReactElement) => {
-    const client = new QueryClient();
+    const client = new QueryClient({
+        defaultOptions: {
+            queries: {
+                retry: false,
+            },
+        },
+    });
     return render(
         <QueryClientProvider client={client}>{ui}</QueryClientProvider>
     );
 };
 
-describe("MovieRecsPage", () => {
-    it("shows shimmer while loading", async () => {
+describe("HomePage", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it("shows shimmer while loading grid items", async () => {
         (api.get as jest.Mock).mockReturnValue(new Promise(() => { })); // never resolves
-        renderWithClient(<MovieRecsPage />);
-        expect(screen.getByTestId("shimmer")).toBeInTheDocument();
+        renderWithClient(<HomePage />);
+        expect(screen.getAllByTestId("shimmer").length).toBeGreaterThan(0);
     });
 
     it("renders movies when API succeeds", async () => {
-        (api.get as jest.Mock).mockResolvedValue({
-            data: { results: [{ id: 1, title: "Inception" }], total_pages: 500 },
+        (api.get as jest.Mock).mockImplementation((url: string) => {
+            if (url.includes("/trending")) {
+                return Promise.resolve({ data: { results: [] } });
+            }
+            return Promise.resolve({
+                data: { results: [{ id: 1, title: "Inception", media_type: "movie", vote_average: 8.8 }], total_pages: 10 },
+            });
         });
 
-        renderWithClient(<MovieRecsPage />);
-        expect(await screen.findByText("Inception")).toBeInTheDocument();
+        renderWithClient(<HomePage />);
+        const items = await screen.findAllByText("Inception");
+        expect(items.length).toBeGreaterThan(0);
     });
 
     it("renders error page on failure", async () => {
         (api.get as jest.Mock).mockRejectedValue(new Error("API error"));
 
-        renderWithClient(<MovieRecsPage />);
+        renderWithClient(<HomePage />);
         expect(await screen.findByText(/sorry/i)).toBeInTheDocument();
     });
 
     it("updates movies when searching", async () => {
-        (api.get as jest.Mock).mockResolvedValueOnce({
-            data: { results: [{ id: 1, title: "Inception" }], total_pages: 500 },
+        (api.get as jest.Mock).mockImplementation((url: string) => {
+            if (url.includes("/trending")) {
+                return Promise.resolve({ data: { results: [] } });
+            }
+            if (url.includes("/search/multi")) {
+                return Promise.resolve({
+                    data: { results: [{ id: 2, title: "Matrix", media_type: "movie", vote_average: 8.7 }], total_pages: 1 },
+                });
+            }
+            return Promise.resolve({
+                data: { results: [{ id: 1, title: "Inception", media_type: "movie", vote_average: 8.8 }], total_pages: 10 },
+            });
         });
 
-        (api.get as jest.Mock).mockResolvedValueOnce({
-            data: { results: [{ id: 2, title: "Matrix" }], total_pages: 500 },
-        });
+        renderWithClient(<HomePage />);
 
-        renderWithClient(<MovieRecsPage />);
-
-        fireEvent.change(screen.getByPlaceholderText(/search/i), {
+        const searchInput = screen.getByPlaceholderText(/search/i);
+        fireEvent.change(searchInput, {
             target: { value: "Matrix" },
         });
 

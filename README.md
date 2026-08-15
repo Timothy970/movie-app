@@ -1,166 +1,48 @@
-# A Movie Recommendation App
+# MovieRecs — Futuristic Cinematic Streaming & Recommendation Platform
 
+MovieRecs is an ultra-modern, futuristic web application built for discovering, exploring, and streaming popular movies and TV series. Featuring a dark glassmorphic UI, multi-server streaming integrations, TV show episode pickers, and interactive genre filtering.
 
-MovieRecs is a sleek and modern web application built to help users discover popular and trending movies. Users can search for specific titles, view detailed information including cast and ratings, and manage their session with a simple authentication system.
+---
 
+##  Features
 
-## ✨ Features
+-  **Futuristic Dark Glassmorphic UI**: Ultra-modern midnight theme (`#08090d`) with translucent glass panels (`backdrop-blur-xl`), glow effects, and custom sleek scrollbars.
+-  **Movies & TV Series Expansion**: Complete support for both Movies and TV Shows (Series), including multi-season episode selectors, season episode grids, and genre pills.
+-  **Embedded Video Streaming Players**: Stream movies and TV episodes directly using multiple integrated embed servers (**VidSrc** (default), **VidAPI**, **VAPlayer**, **AutoEmbed**, and **2Embed**) with seamless server switching and IMDb/TMDB ID support.
+-  **Auto-Switching Hero Banner**: Highlighting top trending releases with dynamic backdrop overlays, auto-sliding carousel controls, and quick action buttons.
+-  **Quick View & Details Modal**: Instant preview of media posters, ratings, synopsis, and episode selection before streaming.
+-  **Real-Time Multi-Search**: Search across movies, TV series, and actors with live results and pagination.
+-  **User Favorites & Auth**: Save favorite movies and series to your account with Firebase Authentication and Supabase persistence.
+-  **Fully Responsive**: Mobile-first layout with custom mobile navigation bar and smooth touch scroll carousels.
 
+---
 
-  Browse Popular Movies: View a paginated list of the most popular movies from The Movie Database (TMDB).
-  Detailed Movie View: Click on any movie to see detailed information, including its poster, overview, rating, cast, and crew.
-  Real-time Search: Instantly search for movies by title or keyword.
-  User Authentication: Simple and secure login
-  Responsive Design: A fully responsive and mobile-first user interface.
-  Loading & Error States: Smooth user experience with skeleton loaders while fetching data.
-  Efficient Caching: API requests are cached to reduce loading times and minimize network requests.
+##  Tech Stack
 
+- **Framework**: Next.js 15 (App Router, Turbopack)
+- **Language**: TypeScript
+- **Styling**: Vanilla CSS3 + Tailwind CSS v4, Glassmorphism, Custom Animations
+- **State & Data Fetching**: TanStack Query (React Query)
+- **API Data Provider**: The Movie Database (TMDB) API
+- **Streaming Players**: VidSrc, VidAPI (`https://vidapi.ru/api`), VAPlayer, AutoEmbed, 2Embed
+- **Authentication**: Firebase Authentication (Google & Email)
+- **Database**: Supabase / Firestore
+- **Testing**: Jest & React Testing Library
 
-## 🛠️ Tech Stack
-Next.js
-TypeScript
-Tailwind CSS
-TanStack Query (React Query)
-TanStack Query (React Query)
-Handles server-state management and caching for API requests. This ensures efficient data fetching, background updates, and a smooth UI experience.
+---
 
-Firebase Authentication
-Used for Google and GitHub login. Firebase securely manages authentication flows and tokens, so you don’t need to build them from scratch.
+##  Environment Variables
 
-Supabase
-Provides storage (e.g., uploading media or files) and database integration. It serves as the backend service alongside Firebase Auth.
+Create a `.env.local` file in the root directory and add the following keys:
 
-Jest
-Framework for unit testing. Ensures components, hooks, and utility functions behave correctly and remain stable as the project grows.
-
-
-
-
-
-# DESIGNS
-### Screen 1: Home Page (Movie Listing)
-
-
-This is the main screen users will see after logging in. It displays a list of popular or recommended movies and provides the main navigation and search tools.
-
-
-#### Visual Layout
-
-
-+--------------------------------------------------------------------------+
-| [Logo: MovieRecs]      [ Search for a movie...          ]  [User Avatar] |  <- Header
-+--------------------------------------------------------------------------+
-|                                                                          |
-|  <H1>Popular Movies</H1>                                                   |
-|                                                                          |
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |  <- Movie
-|  |                 |  |                 |  |                 |  |                 |     Grid
-|  | Movie Title 1   |  | Movie Title 2   |  | Movie Title 3   |  | Movie Title 4   |
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|                                                                          |
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |  | [Movie Poster]  |
-|  |                 |  |                 |  |                 |  |                 |
-|  | Movie Title 5   |  | Movie Title 6   |  | Movie Title 7   |  | Movie Title 8   |
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|                                                                          |
-|                     < Previous      [1] 2 3 ... 10     Next >             <- Pagination
-|                                                                          |
-+--------------------------------------------------------------------------+
-
-
-### ⏳ Screen 2: Home Page - Loading State
-
-
-This screen shows what the user sees while the initial list of movies is being fetched from the API. Using a skeleton screen provides a better user experience than a simple spinner.
-
-
-#### Visual Layout
-
-
-+--------------------------------------------------------------------------+
-| [Logo: MovieRecs]      [ Search for a movie...          ]  [User Avatar] |
-+--------------------------------------------------------------------------+
-|                                                                          |
-|  <H1>Popular Movies</H1>                                                   |
-|                                                                          |
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|  |                 |  |                 |  |                 |  |                 |  <- Skeleton
-|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|     Cards
-|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|                                                                          |
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|  |                 |  |                 |  |                 |  |                 |
-|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|  | [Shimmering Box]|
-|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|  | [Shimmering Bar]|
-|  +-----------------+  +-----------------+  +-----------------+  +-----------------+
-|                                                                          |
-+--------------------------------------------------------------------------+
-
-
-
-
-### Screen 3: Movie Details Page
-
-
-This page displays comprehensive information about a single movie selected from the home page.
-
-
-#### Visual Layout
-
-
-+--------------------------------------------------------------------------+
-| [Logo: MovieRecs]      [ Search for a movie...          ]  [User Avatar] |
-+--------------------------------------------------------------------------+
-|                                                                          |
-|  < Back to list                                                          |
-|                                                                          |
-|  +----------------------------------------------------------------------+
-|  |                                                                      |
-|  |                      [Backdrop Image]                                |
-|  |                                                                      |
-|  +----------------------------------------------------------------------+
-|                                                                          |
-|  +-----------------+  <H1>Movie Title (2025)</H1>                         |
-|  | [Movie Poster]  |                                                    |
-|  |                 |  Rating: ★★★★★ (8.5/10)                             |
-|  |                 |                                                    |
-|  +-----------------+  <H3>Overview</H3>                                   |
-|                       [Lorem ipsum dolor sit amet, consectetur           |
-|                       adipiscing elit. Sed do eiusmod tempor incididunt  |
-|                       ut labore et dolore magna aliqua...]               |
-|                                                                          |
-|  <H3>Cast</H3>                                                            |
-|                                                                          |
-|  [ < ] +-----------+ +-----------+ +-----------+ +-----------+ [ > ]      <- Horizontally
-|        | [Actor Pic] | | [Actor Pic] | | [Actor Pic] | | [Actor Pic] |         Scrollable
-|        | Actor Name  | | Actor Name  | | Actor Name  | | Actor Name  |
-|        | Character   | | Character   | | Character   | | Character   |
-|        +-----------+ +-----------+ +-----------+ +-----------+
-|                                                                          |
-+--------------------------------------------------------------------------+
-
-
-## Getting Started
-
-
-To get a local copy up and running, follow these simple steps.
-
-
-### Prerequisites
-
-
-Make sure you have the following installed on your machine:
-
-
-   [Node.js] (v20 or later)
-   [npm] (or yarn)
-
-## ENV VARIABLES
+```env
+# TMDB API Key (https://www.themoviedb.org/)
 NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
 
+# VidAPI Embed Base URL
+NEXT_PUBLIC_VIDAPI_EMBED_URL=https://vidapi.ru/embed
+
+# Firebase Authentication Configuration
 NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
@@ -168,49 +50,68 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_firebase_app_id
 
+# Supabase Storage & DB
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+---
+
+##  Getting Started
+
+### Prerequisites
+
+- **Node.js**: v20 or later
+- **npm** (or yarn/pnpm)
 
 ### Installation
-1.  Install dependencies:
 
+1. **Clone the repository and install dependencies**:
+   ```bash
+   npm install
+   ```
 
-    ```bash
-    npm install
-    ```
+2. **Set up Environment Variables**:
+   Copy `.env.example` to `.env.local` and add your TMDB API key and player URLs as shown above.
 
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:8080](http://localhost:8080) (or default port) in your browser.
 
-3.  Set up environment variables:
-    Create a file named `.env.local` in the root of your project and add the following variables. You can use the `.env.example` file as a template.
+4. **Run Unit Tests**:
+   ```bash
+   npm test
+   ```
 
+---
 
-    ```env
-    # .env.local
+##  UI Architecture
 
-
-    # Get your free API key from https://www.themoviedb.org/
-    NEXT_PUBLIC_TMDB_API_KEY=YOUR_TMDB_API_KEY
-
-
-    # NextAuth.js Configuration
-    # Generate a secret using: `openssl rand -base64 32` in your terminal
-    NEXTAUTH_SECRET=YOUR_GENERATED_SECRET
-    NEXTAUTH_URL=http://localhost:3000
-
-
-    # Google Auth Provider (optional)
-    # Get credentials from Google Cloud Console: https://console.cloud.google.com/
-    GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
-    GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
-    ```
-
-
-4.  Run the development server:
-
-
-    ```bash
-    npm run dev
-    ```
-
-
-
+```
++---------------------------------------------------------------------------------+
+| [Logo: MovieRecs]  [ Home | Movies | Series | Kids ]   [ Search... ] [ User ]   | <- Glass Nav
++---------------------------------------------------------------------------------+
+|                                                                                 |
+|  +---------------------------------------------------------------------------+  |
+|  |  [ HERO BACKDROP IMAGE ]                                                  |  | <- Auto Hero
+|  |  Movie/Show Title (Year) ★ 8.5 [Series]                                   |  |    Banner
+|  |  [ Watch Now ]   [ Details ]                                              |  |
+|  +---------------------------------------------------------------------------+  |
+|                                                                                 |
+|   Trending Now       [ Movie 1 ]  [ Movie 2 ]  [ Show 1 ]  [ Show 2 ]         | <- Carousel
+|   Trending Shows     [ Series 1 ] [ Series 2 ] [ Series 3 ]                | <- Carousel
+|   Trending Movies    [ Movie A ]  [ Movie B ]  [ Movie C ]                 | <- Carousel
+|                                                                                 |
+|   Explore Catalog                                                              |
+|  [ All Popular ] [ Action ] [ Sci-Fi ] [ Horror ] [ Comedy ] [ Kids ]            | <- Genre Pills
+|                                                                                 |
+|  +--------------+  +--------------+  +--------------+  +--------------+          |
+|  | [Poster]     |  | [Poster]     |  | [Poster]     |  | [Poster]     |          | <- Media
+|  | Title & Year |  | Title & Year |  | Title & Year |  | Title & Year |          |    Grid
+|  +--------------+  +--------------+  +--------------+  +--------------+          |
+|                                                                                 |
+|                      < Previous      [1] 2 3 ... 10     Next >                  | <- Pagination
++---------------------------------------------------------------------------------+
+```
