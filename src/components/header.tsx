@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { Bell } from 'lucide-react';
 
-export type MainCategoryTab = 'home' | 'movies' | 'series' | 'kids';
+export type MainCategoryTab = 'home' | 'movies' | 'series' | 'kids' | 'continue';
 
 interface HeaderProps {
     searchQuery: string;
@@ -56,6 +56,7 @@ const Header: React.FC<HeaderProps> = ({
         { id: 'movies', label: 'Movies' },
         { id: 'series', label: 'Series' },
         { id: 'kids', label: 'Kids' },
+        { id: 'continue', label: 'Continue Watching' },
     ];
 
     return (

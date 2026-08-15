@@ -136,6 +136,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ media, imdbId, o
                                 mediaType={isTV ? 'tv' : 'movie'}
                                 imdbId={imdbId}
                                 title={title}
+                                posterPath={media.poster_path}
                                 inline={true}
                             />
                         </div>

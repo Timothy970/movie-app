@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, X, Server, AlertTriangle, Play } from 'lucide-react';
+import { saveWatchItem } from '@/lib/watchHistory';
 
 interface VideoPlayerProps {
     mediaId: number | string;
@@ -10,6 +11,7 @@ interface VideoPlayerProps {
     season?: number;
     episode?: number;
     title?: string;
+    posterPath?: string | null;
     onClose?: () => void;
     inline?: boolean;
 }
@@ -23,6 +25,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     season = 1,
     episode = 1,
     title = '',
+    posterPath,
     onClose,
     inline = false,
 }) => {
@@ -150,6 +153,16 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         setIframeActive(true);
         setIsLoading(true);
         setHasError(false);
+
+        // Save to Watch History
+        saveWatchItem({
+            id: typeof mediaId === 'string' ? parseInt(mediaId, 10) : mediaId,
+            mediaType,
+            title: title || 'Untitled',
+            posterPath,
+            season: mediaType === 'tv' ? season : undefined,
+            episode: mediaType === 'tv' ? episode : undefined,
+        });
     };
 
     const toggleIdSource = () => {

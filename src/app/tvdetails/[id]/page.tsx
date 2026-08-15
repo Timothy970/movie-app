@@ -113,6 +113,7 @@ export default function TVDetailPage({
                             season={selectedSeason}
                             episode={selectedEpisode}
                             title={`${show.name} - Season ${selectedSeason} Episode ${selectedEpisode}`}
+                            posterPath={show.poster_path}
                             inline={true}
                         />
                     </div>
