@@ -2,8 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Movie } from "../types/Movies";
 
 const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://demo.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy'
 );
 
 export const addFavorite = async (userId: string, movie: Movie) => {
