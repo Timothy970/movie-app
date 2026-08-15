@@ -295,8 +295,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                         // Browser's native popup blocker handles unwanted tabs instead.
                         onLoad={handleIframeLoad}
                         onError={handleIframeError}
-                        title={title || 'Video Stream'}
                     />
+                )}
+                {popupToast && (
+                    <div className="absolute top-4 right-4 z-50 bg-slate-900/90 text-white text-xs px-3 py-1.5 rounded-md border border-slate-700 shadow-lg flex items-center gap-2 animate-fade-in pointer-events-none">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Popup blocked & focus returned</span>
+                    </div>
                 )}
             </div>
         </div>
