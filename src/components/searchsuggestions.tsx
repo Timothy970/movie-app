@@ -9,14 +9,18 @@ import { SearchSuggestionItem } from '@/services/mediaService';
 interface SearchSuggestionsProps {
     suggestions: SearchSuggestionItem[];
     loading: boolean;
+    isOpen: boolean;
     onSelectSuggestion: () => void;
 }
 
 export const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
     suggestions,
     loading,
+    isOpen,
     onSelectSuggestion,
 }) => {
+    if (!isOpen) return null;
+
     if (loading) {
         return (
             <div className="absolute left-0 right-0 top-full mt-2 bg-[#0c0d14]/95 border border-white/10 rounded-2xl p-4 shadow-2xl backdrop-blur-xl z-50 animate-fade-in">
