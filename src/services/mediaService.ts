@@ -122,15 +122,26 @@ export interface SearchSuggestionItem {
     rating?: number;
 }
 
+interface TMDBRawItem {
+    id: number;
+    title?: string;
+    name?: string;
+    media_type?: string;
+    release_date?: string;
+    first_air_date?: string;
+    poster_path?: string | null;
+    vote_average?: number;
+}
+
 // Real-time search suggestions autocompletion using TMDB
 export const getSearchSuggestions = async (query: string): Promise<SearchSuggestionItem[]> => {
     if (!query || query.trim().length < 2) return [];
     try {
         const res = await api.get(`/search/multi`, { params: { query: query.trim(), page: 1 } });
         return (res.data.results || [])
-            .filter((item: any) => item.media_type === "movie" || item.media_type === "tv")
+            .filter((item: TMDBRawItem) => item.media_type === "movie" || item.media_type === "tv")
             .slice(0, 6)
-            .map((item: any) => ({
+            .map((item: TMDBRawItem) => ({
                 id: item.id,
                 title: item.title || item.name || "Untitled",
                 media_type: item.media_type as 'movie' | 'tv',

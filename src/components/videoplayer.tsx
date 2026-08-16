@@ -109,13 +109,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             console.log('%c[VideoPlayer LOG] Focus-Guard: Instantly retained focus on movie tab.', 'color: #10b981; font-weight: bold;');
         };
 
+        const timerRef = toastTimerRef.current;
         window.addEventListener('beforeunload', handleBeforeUnload);
         window.addEventListener('blur', handleBlur);
         return () => {
             window.open = originalOpen;
             window.removeEventListener('beforeunload', handleBeforeUnload);
             window.removeEventListener('blur', handleBlur);
-            if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+            if (timerRef) clearTimeout(timerRef);
         };
     }, [iframeActive]);
 
