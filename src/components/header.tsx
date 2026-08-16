@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Logo from './logo';
 import SearchBar from './searchbar';
 import UserAvatar from './useravatar';
@@ -30,25 +30,64 @@ const Header: React.FC<HeaderProps> = ({
     const pathname = usePathname();
     const { user } = useAuth();
 
+    const searchContainerRef = useRef<HTMLDivElement | null>(null);
     const [suggestions, setSuggestions] = useState<SearchSuggestionItem[]>([]);
     const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+    const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
 
+    // Fetch live search suggestions with debounce & in-flight promise guards
     useEffect(() => {
         if (!searchQuery || searchQuery.trim().length < 2) {
             setSuggestions([]);
+            setLoadingSuggestions(false);
+            setIsSuggestionsOpen(false);
             return;
         }
 
         setLoadingSuggestions(true);
+        setIsSuggestionsOpen(true);
+        let isCurrent = true;
+
         const timer = setTimeout(() => {
             getSearchSuggestions(searchQuery)
-                .then((res) => setSuggestions(res))
-                .catch(() => setSuggestions([]))
-                .finally(() => setLoadingSuggestions(false));
+                .then((res) => {
+                    if (isCurrent) setSuggestions(res);
+                })
+                .catch(() => {
+                    if (isCurrent) setSuggestions([]);
+                })
+                .finally(() => {
+                    if (isCurrent) setLoadingSuggestions(false);
+                });
         }, 250);
 
-        return () => clearTimeout(timer);
+        return () => {
+            isCurrent = false;
+            clearTimeout(timer);
+        };
     }, [searchQuery]);
+
+    // Close suggestions on click outside or Escape key press
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+                setIsSuggestionsOpen(false);
+            }
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsSuggestionsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     const isDashboard = pathname === '/';
 
@@ -114,16 +153,22 @@ const Header: React.FC<HeaderProps> = ({
                 {/* Right side: Search Bar, Notifications, Profile / Login */}
                 <div className="flex items-center gap-4">
                     {showSearchBar && (
-                        <div className="relative">
+                        <div ref={searchContainerRef} className="relative">
                             <SearchBar
                                 value={searchQuery}
-                                onChange={onSearchChange}
+                                onChange={(val) => {
+                                    onSearchChange(val);
+                                    if (val.trim().length >= 2) {
+                                        setIsSuggestionsOpen(true);
+                                    }
+                                }}
                                 className="w-48 sm:w-64 md:w-80"
                             />
                             <SearchSuggestions
                                 suggestions={suggestions}
                                 loading={loadingSuggestions}
-                                onSelectSuggestion={() => setSuggestions([])}
+                                isOpen={isSuggestionsOpen}
+                                onSelectSuggestion={() => setIsSuggestionsOpen(false)}
                             />
                         </div>
                     )}
