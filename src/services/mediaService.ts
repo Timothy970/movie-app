@@ -112,3 +112,34 @@ export const getExternalIds = async (id: string, mediaType: "movie" | "tv"): Pro
         return null;
     }
 };
+
+export interface SearchSuggestionItem {
+    id: number;
+    title: string;
+    media_type: 'movie' | 'tv';
+    year?: string;
+    poster_path: string | null;
+    rating?: number;
+}
+
+// Real-time search suggestions autocompletion using TMDB
+export const getSearchSuggestions = async (query: string): Promise<SearchSuggestionItem[]> => {
+    if (!query || query.trim().length < 2) return [];
+    try {
+        const res = await api.get(`/search/multi`, { params: { query: query.trim(), page: 1 } });
+        return (res.data.results || [])
+            .filter((item: any) => item.media_type === "movie" || item.media_type === "tv")
+            .slice(0, 6)
+            .map((item: any) => ({
+                id: item.id,
+                title: item.title || item.name || "Untitled",
+                media_type: item.media_type as 'movie' | 'tv',
+                year: (item.release_date || item.first_air_date || "").substring(0, 4),
+                poster_path: item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : null,
+                rating: item.vote_average ? Math.round(item.vote_average * 10) / 10 : undefined,
+            }));
+    } catch {
+        return [];
+    }
+};
+
