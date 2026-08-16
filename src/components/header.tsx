@@ -4,7 +4,6 @@ import SearchBar from './searchbar';
 import UserAvatar from './useravatar';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
-import { Bell } from 'lucide-react';
 import { getSearchSuggestions, SearchSuggestionItem } from '@/services/mediaService';
 import { SearchSuggestions } from './searchsuggestions';
 
@@ -128,15 +127,6 @@ const Header: React.FC<HeaderProps> = ({
                             />
                         </div>
                     )}
-
-                    {/* Notification Bell */}
-                    <button
-                        className="p-2.5 rounded-full glass-pill text-gray-300 hover:text-white transition-colors relative hidden sm:flex"
-                        aria-label="Notifications"
-                    >
-                        <Bell className="w-4 h-4" />
-                        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500"></span>
-                    </button>
 
                     {/* User Profile / Login Button */}
                     {user ? (
