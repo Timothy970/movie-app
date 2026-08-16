@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { RefreshCw, X, Server, AlertTriangle, Play, ShieldCheck } from 'lucide-react';
+import { RefreshCw, X, Server, AlertTriangle, Play } from 'lucide-react';
 import { saveWatchItem } from '@/lib/watchHistory';
 
 interface VideoPlayerProps {
@@ -110,13 +109,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             console.log('%c[VideoPlayer LOG] Focus-Guard: Instantly retained focus on movie tab.', 'color: #10b981; font-weight: bold;');
         };
 
+        const timerRef = toastTimerRef.current;
         window.addEventListener('beforeunload', handleBeforeUnload);
         window.addEventListener('blur', handleBlur);
         return () => {
             window.open = originalOpen;
             window.removeEventListener('beforeunload', handleBeforeUnload);
             window.removeEventListener('blur', handleBlur);
-            if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+            if (timerRef) clearTimeout(timerRef);
         };
     }, [iframeActive]);
 

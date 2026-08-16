@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from './logo';
 import SearchBar from './searchbar';
 import UserAvatar from './useravatar';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
-import { Bell } from 'lucide-react';
+import { getSearchSuggestions, SearchSuggestionItem } from '@/services/mediaService';
+import { SearchSuggestions } from './searchsuggestions';
 
 export type MainCategoryTab = 'home' | 'movies' | 'series' | 'kids' | 'continue';
 
@@ -28,6 +29,26 @@ const Header: React.FC<HeaderProps> = ({
     const router = useRouter();
     const pathname = usePathname();
     const { user } = useAuth();
+
+    const [suggestions, setSuggestions] = useState<SearchSuggestionItem[]>([]);
+    const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+
+    useEffect(() => {
+        if (!searchQuery || searchQuery.trim().length < 2) {
+            setSuggestions([]);
+            return;
+        }
+
+        setLoadingSuggestions(true);
+        const timer = setTimeout(() => {
+            getSearchSuggestions(searchQuery)
+                .then((res) => setSuggestions(res))
+                .catch(() => setSuggestions([]))
+                .finally(() => setLoadingSuggestions(false));
+        }, 250);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const isDashboard = pathname === '/';
 
@@ -99,17 +120,13 @@ const Header: React.FC<HeaderProps> = ({
                                 onChange={onSearchChange}
                                 className="w-48 sm:w-64 md:w-80"
                             />
+                            <SearchSuggestions
+                                suggestions={suggestions}
+                                loading={loadingSuggestions}
+                                onSelectSuggestion={() => setSuggestions([])}
+                            />
                         </div>
                     )}
-
-                    {/* Notification Bell */}
-                    <button
-                        className="p-2.5 rounded-full glass-pill text-gray-300 hover:text-white transition-colors relative hidden sm:flex"
-                        aria-label="Notifications"
-                    >
-                        <Bell className="w-4 h-4" />
-                        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500"></span>
-                    </button>
 
                     {/* User Profile / Login Button */}
                     {user ? (
