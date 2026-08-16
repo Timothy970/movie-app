@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { RefreshCw, X, Server, AlertTriangle, Play, ShieldCheck } from 'lucide-react';
+import { RefreshCw, X, Server, AlertTriangle, Play } from 'lucide-react';
 import { saveWatchItem } from '@/lib/watchHistory';
 
 interface VideoPlayerProps {
